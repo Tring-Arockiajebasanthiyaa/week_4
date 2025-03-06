@@ -2,89 +2,97 @@ import React, { useState, useEffect } from "react";
 import "./style.css";
 import AddPersonaPage from "./AddPersonaPage";
 import { PlusCircle } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { addPersona, updatePersona, deletePersona } from "../redux/personaSlice";
+
 const Home = () => {
   const [showAddPersona, setShowAddPersona] = useState(false);
   const [selectedPersona, setSelectedPersona] = useState(null);
-  const [personas, setPersonas] = useState([]);
+  const personas = useSelector((state) => Array.isArray(state.personas) ? state.personas : []);
+  
+
+  const dispatch = useDispatch();
+  
   const [userInitial, setUserInitial] = useState("");
   const [userName, setUserName] = useState("");
-  
+
   useEffect(() => {
     const googleUser = JSON.parse(localStorage.getItem("googleUser"));
     const localUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  
-    if (googleUser && googleUser.name) { 
+
+    if (googleUser && googleUser.name) {
       setUserName(googleUser.name);
       setUserInitial(googleUser.name.split(" ").map((word) => word.charAt(0)).join(""));
-    } else if (localUser && localUser.name) { 
+    } else if (localUser && localUser.name) {
       setUserName(localUser.name);
       setUserInitial(localUser.name.split(" ").map((word) => word.charAt(0)).join(""));
     }
-  },);
+  }, []);
 
-  
-  const today = new Date();
-  function getDate() {
-    const today = new Date();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    const date = today.getDate();
-    const time = today.getTime();
-    return `${month}/${date}/${year}/${time}`;
-  }
-  const [currentDate, setCurrentDate] = useState(getDate());
-  const handlePersonaAdded = (newPersona) => {
-    if (selectedPersona !== null) {
-      const updatedPersonas = [...personas];
-      updatedPersonas[selectedPersona] = newPersona;
-      setPersonas(updatedPersonas);
-    } else {
-      setPersonas([...personas, newPersona]);
-    }
-    setShowAddPersona(false);
-    setSelectedPersona(null);
-  };
+
+  useEffect(() => {
+    console.log("Personas:", personas); // Debugging
+  }, [personas]);
 
   const handlePersonaClick = (index) => {
     setSelectedPersona(index);
     setShowAddPersona(true);
   };
-
-  const handleLogout = () => {
-    //localStorage.removeItem("googleUser");
-    window.location.href = "/";
+  const handlePersonaAdded = (newPersona) => {
+    if (newPersona.id && personas.find((p) => p.id === newPersona.id)) {
+      dispatch(updatePersona(newPersona));
+    } else {
+      dispatch(addPersona(newPersona));
+    }
+    setShowAddPersona(false);
   };
 
+  const handleDeletePersona = (personaId) => {
+    dispatch(deletePersona(personaId));
+    setShowAddPersona(false);
+  };
+
+
+  
+  
+
   if (showAddPersona) {
-    return <AddPersonaPage onPersonaAdded={handlePersonaAdded} persona={personas[selectedPersona]} />;
+    return (
+      <AddPersonaPage
+      onPersonaAdded={handlePersonaAdded}
+      persona={personas[selectedPersona] || {}}
+      onDeletePersona={handleDeletePersona}
+    />
+    
+    );
   }
 
   return (
     <div className="home-container">
       <div className="header-field">
-      <div className="container">
-        <div className="user-details">
-        <h1 className="initial">{userInitial}</h1>
-        <h2 className="name-field">{userName}</h2>
+        <div className="container">
+          <div className="user-details">
+            <h1 className="initial">{userInitial}</h1>
+            <h2 className="name-field">{userName}</h2>
+          </div>
+          <div className="btn">
+            <button className="logout-button">Add Activity</button>
+            <button className="logout-button">Logout</button>
+          </div>
         </div>
-        <div className="btn"> 
-        <button className="logout-button" >
-         Add Activity
-        </button>
-        <button className="logout-button" onClick={handleLogout}>
-          Logout
-        </button>
+        <hr className="hrbar" />
+        <div className="navbar">
+          <h5 className="personname-field">Persona</h5>
+          <h5>Strategy Canvas</h5>
         </div>
-      </div>
-      <hr className="hrbar"/>
-      <div className="navbar">
-        <h5 className="personname-field">Persona</h5>
-        <h5>Strategy Canvas</h5>
-      </div>
       </div>
       <div className="persona-content align-items-center">
         {personas.map((persona, index) => (
-          <div className="persona-card" key={index} onClick={() => handlePersonaClick(index)}>
+          <div
+            className="persona-card"
+            key={persona.id}
+            onClick={() => handlePersonaClick(index)}
+          >
             <div className="persona-avatar">
               {persona.avatarURL ? (
                 <img src={persona.avatarURL} alt="Avatar" className="avatar-img" />
@@ -94,9 +102,7 @@ const Home = () => {
             </div>
             <div className="persona-details">
               <span className="persona-name">{persona.name || "Unnamed"}</span>
-              
             </div>
-            <span className="current_date">{currentDate}</span>
           </div>
         ))}
         <div
@@ -106,9 +112,9 @@ const Home = () => {
             setSelectedPersona(null);
           }}
         >
-            <span className="plus-icon">
-            <PlusCircle color="#C0C0C0"  size={60} />
-            </span>
+          <span className="plus-icon">
+            <PlusCircle color="#C0C0C0" size={60} />
+          </span>
           <span className="add-text">Add a Persona</span>
         </div>
       </div>

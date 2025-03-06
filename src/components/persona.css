@@ -1,3 +1,4 @@
+
 .add-persona-page {
   background-color: #f0f0f0;
   padding: 20px;
@@ -17,23 +18,29 @@
 }
 .name_item{
   background-color: #f9f7f7;
-  padding: 30px;
+  padding: 20px;
   border: 1px solid #ccc;
   text-align:start;
+  
 }
 .form-label{
   padding-right: 20px;
 }
 .input_label{
-  background-color: rgb(118, 115, 115);
+  background-color: rgb(244, 236, 236);
   width: 35%;
   color: black;
-  padding-right: 20%;
+  border: 1px solid black;
+}
+.react {
+  height: 100px; 
+  width: 100%;
+  
 }
 
 .persona-name-section {
   position: absolute;
-  top: 100%;
+ 
   left: 40px;
   color: black;
 }
@@ -61,52 +68,50 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
-  /* width: 100%;
-   */
+  gap: 10px;
+  
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  padding-top: 30px;
+  grid-template-columns: repeat(2, minmax(300px, 1fr)); /* Adjust column width */
+  grid-auto-rows: minmax(150px, auto); /* Ensures rows expand properly */
+  gap: 40px;
+  margin-top: 20px;
 }
+
+
+
 
 .form-item {
   display: flex;
   flex-direction: column;
+  margin-bottom: 10px;
+  
+  
 }
 
 .form-label {
   font-size: 14px;
-  margin-bottom: 5px;
   color:black;
+  margin-bottom: 10px;
  
 }
 
-.form-item textarea {
-  padding: 30px;
-  border: 1px solid #ccc;
-  text-align:start;
-  border-radius: 4px;
-  /* text-align: center; */
-  justify-content: flex-start;
-  
-  resize: both;
-  width: 100%;
-  box-sizing: border-box;
-}
+
 
 .button-section {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-evenly;
+  padding-top: 30px;
   margin-top: 20px;
 }
 
 .delete-button,
 .close-button,
 .update-button {
-  padding: 10px 20px;
+  padding: 10px 10px;
+  width: 150px;
   margin-left: 10px;
   border: none;
   border-radius: 4px;
@@ -114,10 +119,11 @@
 }
 
 .delete-button {
-  background-color: #fafaf8;
+  background-color: #1cb3dc;
   float: inline-start;
   color: rgb(246, 13, 13);
   float: left;
+  justify-content: flex-start;
 }
 
 .close-button {

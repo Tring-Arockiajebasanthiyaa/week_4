@@ -1,0 +1,9 @@
+{
+    "quote": "Enter a quote that identifies the persona",
+    "description": "Enter a general description/bio about the persona",
+    "attitudes": "What drives and incentivizes the persona to reach desired goals?",
+    "painPoints": "What are the persona's biggest challenges?",
+    "jobsNeeds": "What are tech persona's functional, social, and emotional needs to be successful at their jobs?",
+    "activities": "What does the person like to do in their free time?"
+  }
+  
