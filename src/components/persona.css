@@ -1,0 +1,136 @@
+.add-persona-page {
+  background-color: #f0f0f0;
+  padding: 20px;
+  font-family: sans-serif;
+  height: 100vh;
+  width: 100vw;
+  overflow-y: auto;
+}
+
+.header-section {
+  position: relative;
+  background-color: gray;
+  padding: 20px;
+  height: 200px;
+  overflow: hidden;
+
+}
+.name_item{
+  background-color: #f9f7f7;
+  padding: 30px;
+  border: 1px solid #ccc;
+  text-align:start;
+}
+.form-label{
+  padding-right: 20px;
+}
+.input_label{
+  background-color: rgb(118, 115, 115);
+  width: 35%;
+  color: black;
+  padding-right: 20%;
+}
+
+.persona-name-section {
+  position: absolute;
+  top: 100%;
+  left: 40px;
+  color: black;
+}
+
+.persona-name-label {
+  font-size: 14px;
+}
+
+.persona-name-value {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+
+
+.header-section .image-upload {
+  width: 100%;
+  height: 100%;
+}
+
+.form-section {
+ 
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  /* width: 100%;
+   */
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding-top: 30px;
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color:black;
+ 
+}
+
+.form-item textarea {
+  padding: 30px;
+  border: 1px solid #ccc;
+  text-align:start;
+  border-radius: 4px;
+  /* text-align: center; */
+  justify-content: flex-start;
+  
+  resize: both;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.button-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.delete-button,
+.close-button,
+.update-button {
+  padding: 10px 20px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-button {
+  background-color: #fafaf8;
+  float: inline-start;
+  color: rgb(246, 13, 13);
+  float: left;
+}
+
+.close-button {
+  background-color: #6c757d;
+  color: white;
+}
+
+.update-button {
+  background-color: #13eeea;
+  color: white;
+}
+.imageuploaded{
+  width: 10%;
+  padding: 10%;
+  height: 10%;
+}

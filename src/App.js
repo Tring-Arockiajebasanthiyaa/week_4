@@ -12,9 +12,7 @@ const AuthForm = ({ type, onAuth, setView, setIsLoggedIn }) => {
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
-
-
-
+const [name, setName] = useState("");
   const handleSubmit = (e) => {
 
     e.preventDefault();
@@ -34,25 +32,32 @@ const AuthForm = ({ type, onAuth, setView, setIsLoggedIn }) => {
       return;
 
     }
-
+    if (type === "signup" && name.trim() === "") {
+        alert("Please enter your name");
+        return;
+    }
     setError("");
 
-    onAuth(email, password);
+    onAuth(email, password,name);
 
   };
-
- 
-
   const handleGoogleSuccess = (credentialResponse) => {
 
-    console.log("Google Sign-In Response:", credentialResponse);
+        console.log("Google Sign-In Response:", credentialResponse);
 
-    alert("Login successfully!");
+    
+    console.log("Login successfully!");
     try {
 
       const decoded = jwtDecode(credentialResponse.credential);
 
       console.log("Decoded JWT:", decoded);
+    const user = {
+    name: decoded.name,  
+    email: decoded.email 
+    };
+    localStorage.setItem('googleUser', JSON.stringify(user));
+    console.log("User saved to local storage:", user);
       setIsLoggedIn(true);
 
     } catch (error) {
@@ -62,8 +67,34 @@ const AuthForm = ({ type, onAuth, setView, setIsLoggedIn }) => {
     }
 
   };
-
- 
+const handleAuth = (email, password, name) => {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+  
+    if (setView === "signup") {
+      if (users.some((user) => user.email === email)) {
+        alert("User already exists");
+        return;
+      }
+  
+      
+      users.push({ name, email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+  
+      alert("Signup successful! Please login.");
+      setView("login");
+    } else {
+      const user = users.find(
+        (user) => user.email === email && user.password === password
+      );
+      if (user) {
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
+        setIsLoggedIn(true);
+      } else {
+        alert("Invalid credentials");
+      }
+    }
+  };
+  
 
 
 
@@ -85,7 +116,7 @@ const AuthForm = ({ type, onAuth, setView, setIsLoggedIn }) => {
 
       <button className="social-button google-button">
 
-      <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} theme="filled_black" />
+      <GoogleLogin onSuccess={handleGoogleSuccess} buttonText="Sign in with Google" onError={handleGoogleError} theme="filled_black" />
 
       </button>
 
@@ -96,7 +127,12 @@ const AuthForm = ({ type, onAuth, setView, setIsLoggedIn }) => {
 
 
       <form onSubmit={handleSubmit}>
-
+        <input
+            type="text"
+            placeholder="Enter your name" name="username"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+        />
         <input
 
           type="email"
@@ -110,7 +146,7 @@ const AuthForm = ({ type, onAuth, setView, setIsLoggedIn }) => {
           onChange={(e) => setEmail(e.target.value)}
 
         />
-
+        
         <input
 
           type="password"
@@ -164,54 +200,34 @@ const App = () => {
 
 
 
-  const handleAuth = (email, password) => {
-
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-
-
-
-    if (view === "signup") {
-
-      if (users.some((user) => user.email === email)) {
-
-        alert("User already exists");
-
-        return;
-
-      }
-
-      users.push({ email, password });
-
-      localStorage.setItem("users", JSON.stringify(users));
-
-      alert("Signup successful! Please login.");
-
-      setView("login");
-
-    } else {
-
-      const user = users.find(
-
-        (user) => user.email === email && user.password === password
-
-      );
-
-      if (user) {
-
-        setIsLoggedIn(true);
-
-      } else {
-
-        alert("Invalid credentials");
-
-      }
-
-    }
-
-  };
-
-
-
+  const handleAuth = (email, password, name) => {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+  
+    if (view === "signup") {
+      if (users.some((user) => user.email === email)) {
+        alert("User already exists");
+        return;
+      }
+  
+      users.push({ name, email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+  
+      alert("Signup successful! Please login.");
+      setView("login");
+    } else {
+      const user = users.find(
+        (user) => user.email === email && user.password === password
+      );
+  
+      if (user) {
+        localStorage.setItem("loggedInUser", JSON.stringify(user)); // ✅ Store logged-in user
+        setIsLoggedIn(true);
+      } else {
+        alert("Invalid credentials");
+      }
+    }
+  };
+  
   return isLoggedIn ? (
 
     <Home />
