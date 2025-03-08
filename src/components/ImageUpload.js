@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import UploadingAnimation from "../images/loading.png";
 import EditIcon from "../images/edit.png";
-import DefaultImage from "../images/professional'.jpg";
+import DefaultImage from "./Images/dream.jpg";
 import "./style.css";
 
 const ImageUpload = ({ onUploadSuccess, initialImage }) => {
@@ -18,12 +18,31 @@ const ImageUpload = ({ onUploadSuccess, initialImage }) => {
     try {
       setIsUploading(true);
       setAvatarURL(UploadingAnimation);
+  
       const uploadedFile = fileUploadRef.current.files[0];
+  
+      if (!uploadedFile) {
+        setAvatarURL(initialImage || DefaultImage);
+        setIsUploading(false);
+        return;
+      }
+  
+      // ✅ Check file size (500MB = 500 * 1024 * 1024 bytes)
+      const maxFileSize = 500 * 1024 * 1024;
+      if (uploadedFile.size > maxFileSize) {
+        alert("File size must be less than 500MB.");
+        setAvatarURL(initialImage || DefaultImage);
+        setIsUploading(false);
+        return;
+      }
+  
+      const previewURL = URL.createObjectURL(uploadedFile);
+      setAvatarURL(previewURL);
+  
+      // ✅ Convert to Base64 asynchronously
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result;
-        setAvatarURL(base64String);
-        onUploadSuccess(base64String); // Send Base64 to parent
+        onUploadSuccess(reader.result); // Send Base64 to parent
       };
       reader.readAsDataURL(uploadedFile);
     } catch (error) {
@@ -33,6 +52,7 @@ const ImageUpload = ({ onUploadSuccess, initialImage }) => {
       setIsUploading(false);
     }
   };
+  
 
   useEffect(() => {
     setAvatarURL(initialImage || DefaultImage);

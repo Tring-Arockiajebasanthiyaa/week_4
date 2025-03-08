@@ -6,13 +6,16 @@
   height: 100vh;
   width: 100vw;
   overflow-y: auto;
+  margin-top: 0px;
+  padding-top: 0px;
 }
 
 .header-section {
+ 
   position: relative;
-  background-color: gray;
-  padding: 20px;
-  height: 200px;
+  background-color: #f0f0f0;
+  height: 50px;
+  width:100%;
   overflow: hidden;
 
 }
@@ -25,40 +28,46 @@
 }
 .form-label{
   padding-right: 20px;
+  font-weight: bold;
 }
 .input_label{
   background-color: rgb(244, 236, 236);
   width: 35%;
+  padding: 20px;
   color: black;
-  border: 1px solid black;
+  
 }
 .react {
   height: 100px; 
   width: 100%;
+  color: black;
   
 }
 
 .persona-name-section {
-  position: absolute;
- 
   left: 40px;
   color: black;
+  padding-bottom: 10px;
+  margin-top: 20px;
+ 
 }
 
 .persona-name-label {
-  font-size: 14px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 10px;
 }
 
 .persona-name-value {
   font-size: 20px;
   font-weight: bold;
+  
 }
-
-
-
-.header-section .image-upload {
-  width: 100%;
+.image {
+ 
+  width: 100vw;
   height: 100%;
+  object-fit:contain;
 }
 
 .form-section {
@@ -83,6 +92,7 @@
 
 
 
+
 .form-item {
   display: flex;
   flex-direction: column;
@@ -95,6 +105,7 @@
   font-size: 14px;
   color:black;
   margin-bottom: 10px;
+  margin-top: 40px;
  
 }
 
@@ -102,16 +113,16 @@
 
 .button-section {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   padding-top: 30px;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .delete-button,
 .close-button,
 .update-button {
-  padding: 10px 10px;
-  width: 150px;
+  padding: 10px 20px;
+  width: 100px;
   margin-left: 10px;
   border: none;
   border-radius: 4px;
@@ -119,9 +130,9 @@
 }
 
 .delete-button {
-  background-color: #1cb3dc;
+  background-color: #ff4800;
   float: inline-start;
-  color: rgb(246, 13, 13);
+  color: #121212;;
   float: left;
   justify-content: flex-start;
 }
@@ -132,7 +143,7 @@
 }
 
 .update-button {
-  background-color: #13eeea;
+  background-color: #e81d72;
   color: white;
 }
 .imageuploaded{

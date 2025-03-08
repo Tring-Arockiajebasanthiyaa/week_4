@@ -1,20 +1,39 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Load initial state from localStorage
+const loadFromLocalStorage = () => {
+  const storedData = localStorage.getItem("personas");
+  return storedData ? JSON.parse(storedData) : [];
+};
+
+const saveToLocalStorage = (state) => {
+  localStorage.setItem("personas", JSON.stringify(state));
+};
+
 const personaSlice = createSlice({
   name: "personas",
-  initialState: [],
+  initialState: loadFromLocalStorage(),
   reducers: {
     addPersona: (state, action) => {
-      state.push(action.payload);
+      if (action.payload?.id) {
+        state.push(action.payload);
+        saveToLocalStorage(state); // Save after adding
+      }
     },
     updatePersona: (state, action) => {
-      const index = state.findIndex((p) => p.id === action.payload.id);
+      const { id } = action.payload;
+      if (!id) return;
+
+      const index = state.findIndex((p) => p.id === id);
       if (index !== -1) {
-        state[index] = action.payload;
+        state[index] = { ...state[index], ...action.payload };
+        saveToLocalStorage(state); // Save after updating
       }
     },
     deletePersona: (state, action) => {
-      return state.filter((p) => p.id !== action.payload);
+      const newState = state.filter((p) => p.id !== action.payload);
+      saveToLocalStorage(newState); // Save after deleting
+      return newState;
     },
   },
 });

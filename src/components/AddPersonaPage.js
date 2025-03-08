@@ -1,57 +1,77 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import "./AddPersonaPage.css";
-import "./persona.css";
+import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
-import "bootstrap/dist/css/bootstrap-grid.min.css";
+import "./persona.css";
+import { useDispatch } from "react-redux";
+import { addPersona, updatePersona } from "../redux/personaSlice";
 
-const AddPersonaPage = ({ onPersonaAdded, persona, onDeletePersona }) => {
-  const [name, setName] = useState(persona?.name || "");
-  const [quote, setQuote] = useState(persona?.quote || "");
-  const [description, setDescription] = useState(persona?.description || "");
-  const [attitudes, setAttitudes] = useState(persona?.attitudes || "");
-  const [painPoints, setPainPoints] = useState(persona?.painPoints || "");
-  const [jobsNeeds, setJobsNeeds] = useState(persona?.jobsNeeds || "");
-  const [activities, setActivities] = useState(persona?.activities || "");
-  const [avatarURL, setAvatarURL] = useState(persona?.avatarURL || null);
-  const quillRef = useRef(null);
-  const id = persona?.id || Date.now().toString();
+const AddPersonaPage = ({ personas, persona, onDeletePersona }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const [personaData, setPersonaData] = useState({
+    id: persona?.id || "",
+    name: persona?.name || "",
+    quote: persona?.quote || "",
+    description: persona?.description || "",
+    attitudes: persona?.attitudes || "",
+    painPoints: persona?.painPoints || "",
+    jobsNeeds: persona?.jobsNeeds || "",
+    activities: persona?.activities || "",
+    avatarURL: persona?.avatarURL || null,
+  });
+
+  useEffect(() => {
+    if (persona) {
+      setPersonaData(persona);
+    }
+  }, [persona]);
+
+  const handleChange = (field, value) => {
+    setPersonaData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onPersonaAdded({
-      id,  // Use existing ID if available
-      name,
-      quote,
-      description,
-      attitudes,
-      painPoints,
-      jobsNeeds,
-      activities,
-      avatarURL,
-    });
+  
+    const timestamp = new Date().toISOString(); // Current time
+  
+    if (personaData.id && personas.some(p => p.id === personaData.id)) {
+      dispatch(updatePersona({ ...personaData, lastUpdated: timestamp }));
+    } else {
+      const newPersona = { 
+        ...personaData, 
+        id: Date.now().toString(), 
+        createdAt: timestamp, 
+        lastUpdated: timestamp 
+      };
+      dispatch(addPersona(newPersona));
+    }
+    
+    console.log("Navigating to home...");
+    window.history.back();
+  };
+  
+  
+  
+
+  const handleClose = () => {
+    console.log("Navigating to home...");
+    window.history.back();
+    // setTimeout(() => navigate("/home", { replace: true }), 100); // Delay added for smoother navigation
   };
   
 
   const handleDelete = () => {
-    if (!persona.id) {
-      console.error("Cannot delete: Persona is undefined.");
-      return;
-    }
-    if (window.confirm("Are you sure you want to delete this persona?")) {
-      onDeletePersona(persona.id);
-    }
-  };
-  
-
-  const onClose = () => {
-    window.location.href = "/"; // Redirect to home page when closing
+    onDeletePersona(personaData.id);
+      navigate("/home", { replace: true });
+    
   };
 
   const handleImageUploadSuccess = (url) => {
-    setAvatarURL(url);
+    setPersonaData((prev) => ({ ...prev, avatarURL: url }));
   };
 
   const modules = {
@@ -59,82 +79,76 @@ const AddPersonaPage = ({ onPersonaAdded, persona, onDeletePersona }) => {
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
       ["bold", "italic", "underline", "strike"],
       [{ list: "ordered" }, { list: "bullet" }],
-      ["image"],
+      ["link", "image"],
       ["clean"],
     ],
   };
 
-  const formats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "list",
-    "bullet",
-    "link",
-    "image",
-  ];
-
   return (
     <div className="add-persona-page">
+      <ImageUpload onUploadSuccess={handleImageUploadSuccess} initialImage={personaData.avatarURL} className="image" />
       <div className="header-section">
+      {/* <ImageUpload onUploadSuccess={handleImageUploadSuccess} initialImage={personaData.avatarURL} className="image" /> */}
         <div className="persona-name-section">
-          <div className="persona-name-label">Persona Name</div>
-          <div className="persona-name-value">{name || "Sample"}</div>
+          <span className="persona-name-label">Persona Name</span>
+          <span className="persona-name-value">{personaData.name || "Sample"}</span>
         </div>
-        <ImageUpload
-          onUploadSuccess={handleImageUploadSuccess}
-          initialImage={avatarURL}
-          className="justify-content-center"
-        />
       </div>
-
+      
       <div className="form-section">
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="name_item">
-            <label className="form-label" htmlFor="name">
-              Persona Name
-            </label>
+            <label className="form-label">Persona Name</label>
             <input
               type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={personaData.name}
+              onChange={(e) => handleChange("name", e.target.value)}
               className="input_label"
+              required
             />
           </div>
+
           <div className="form-grid">
             <div className="form-item">
               <label className="form-label">Notable Quote</label>
-              <ReactQuill value={quote} onChange={setQuote} modules={modules} formats={formats} className="react" theme="snow" />
+              <ReactQuill value={personaData.quote} onChange={(value) => handleChange("quote", value)} modules={modules} />
             </div>
             <div className="form-item">
               <label className="form-label">Description</label>
-              <ReactQuill value={description} onChange={setDescription} modules={modules} formats={formats} className="react" />
+              <ReactQuill value={personaData.description} onChange={(value) => handleChange("description", value)} modules={modules} />
             </div>
             <div className="form-item">
-              <label className="form-label">Attitudes / Motivations</label>
-              <ReactQuill value={attitudes} onChange={setAttitudes} modules={modules} formats={formats} className="react" />
+              <label className="form-label">Attitudes/Motivations</label>
+              <ReactQuill value={personaData.attitudes} onChange={(value) => handleChange("attitudes", value)} modules={modules} />
             </div>
             <div className="form-item">
               <label className="form-label">Pain Points</label>
-              <ReactQuill value={painPoints} onChange={setPainPoints} modules={modules} formats={formats} className="react" />
+              <ReactQuill value={personaData.painPoints} onChange={(value) => handleChange("painPoints", value)} modules={modules} />
             </div>
             <div className="form-item">
-              <label className="form-label">Jobs / Needs</label>
-              <ReactQuill value={jobsNeeds} onChange={setJobsNeeds} modules={modules} formats={formats} className="react" ref={quillRef} />
+              <label className="form-label">Jobs/Needs</label>
+              <ReactQuill value={personaData.jobsNeeds} onChange={(value) => handleChange("jobsNeeds", value)} modules={modules} />
             </div>
             <div className="form-item">
               <label className="form-label">Activities</label>
-              <ReactQuill value={activities} onChange={setActivities} modules={modules} formats={formats} className="react" style={{ cursor: "text" }} ref={quillRef} />
+              <ReactQuill value={personaData.activities} onChange={(value) => handleChange("activities", value)} modules={modules} />
             </div>
           </div>
+
           <div className="button-section">
-          {persona.id && <button type="button" onClick={handleDelete}>DELETE</button>}
-          <button type="button" onClick={onClose}>CLOSE</button>
-          <button type="submit" onClick={handleSubmit}>{persona.id ? "UPDATE PERSONA" : "ADD PERSONA"}</button>
-        </div>
+            {persona && (
+              <button type="button" className="delete-button" onClick={handleDelete}>
+                DELETE
+              </button>
+            )}
+
+            <button type="button" className="close-button" onClick={handleClose}>
+              CLOSE
+            </button>
+            <button type="submit" className="update-button">
+              {persona?.id ? "UPDATE PERSONA" : "CREATE PERSONA"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

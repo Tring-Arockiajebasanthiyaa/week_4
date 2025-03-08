@@ -1,69 +1,124 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./style.css";
 import AddPersonaPage from "./AddPersonaPage";
+import "./AddPersonaPage.css";
 import { PlusCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPersona, updatePersona, deletePersona } from "../redux/personaSlice";
+import defaultimage from "./Images/dream.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [showAddPersona, setShowAddPersona] = useState(false);
   const [selectedPersona, setSelectedPersona] = useState(null);
-  const personas = useSelector((state) => Array.isArray(state.personas) ? state.personas : []);
-  
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const personas = useSelector((state) => Array.isArray(state.personas) ? state.personas : []);
   
   const [userInitial, setUserInitial] = useState("");
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    const googleUser = JSON.parse(localStorage.getItem("googleUser"));
+    const getUserData = () => {
+      const googleUser = JSON.parse(localStorage.getItem("googleUser"));
     const localUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    if (googleUser && googleUser.name) {
-      setUserName(googleUser.name);
-      setUserInitial(googleUser.name.split(" ").map((word) => word.charAt(0)).join(""));
-    } else if (localUser && localUser.name) {
-      setUserName(localUser.name);
-      setUserInitial(localUser.name.split(" ").map((word) => word.charAt(0)).join(""));
+    let currentUser = googleUser || localUser;
+    let userInitial = "G"; // Default to 'G'
+
+    if (currentUser?.name) {
+      setUserName(currentUser.name);
+      userInitial = currentUser.name.charAt(0).toUpperCase();
+    } else if (currentUser?.email) {
+      setUserName(currentUser.email);
+      const usernamePart = currentUser.email.split('@')[0];
+      userInitial = usernamePart.charAt(0).toUpperCase();
+    } else {
+      setUserName("Guest"); // Default name if no user data
     }
+
+    setUserInitial(userInitial); // Set the userInitial state
+  };
+
+    getUserData();
+
+    const handleStorageChange = () => {
+      getUserData();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-
-  useEffect(() => {
-    console.log("Personas:", personas); // Debugging
-  }, [personas]);
-
+  const getTimeAgo = (timestamp) => {
+    if (!timestamp) return "Not available";
+  
+    const now = new Date();
+    const updatedTime = new Date(timestamp);
+    const diffInSeconds = Math.floor((now - updatedTime) / 1000);
+  
+    if (diffInSeconds < 60) return "Just now";
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    if (diffInSeconds < 172800) return "Yesterday";
+  
+    return updatedTime.toLocaleDateString(); // Default date format
+  };
+  
   const handlePersonaClick = (index) => {
-    setSelectedPersona(index);
+    setSelectedPersona(personas[index]);
     setShowAddPersona(true);
   };
+
   const handlePersonaAdded = (newPersona) => {
-    if (newPersona.id && personas.find((p) => p.id === newPersona.id)) {
-      dispatch(updatePersona(newPersona));
-    } else {
-      dispatch(addPersona(newPersona));
+    
+    if (!newPersona.id) {
+      newPersona.id = Date.now().toString();
+      
     }
+     
+   
+    const updatedPersona = { ...newPersona,};
+  
+    if (personas.some((p) => p.id === updatedPersona.id)) {
+      dispatch(updatePersona(updatedPersona));
+    } else {
+      dispatch(addPersona(updatedPersona));
+    }
+    
     setShowAddPersona(false);
+    setSelectedPersona(null);
+    navigate("/home");
   };
 
   const handleDeletePersona = (personaId) => {
-    dispatch(deletePersona(personaId));
-    setShowAddPersona(false);
+    if (window.confirm("Are you sure you want to delete this persona?")) {
+      dispatch(deletePersona(personaId));
+      setShowAddPersona(false);
+      setSelectedPersona(null);
+      setTimeout(() => navigate("/home"), 100);
+    }
   };
 
-
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("googleUser");
+    navigate("/", { replace: true });
+  };
   
-  
-
   if (showAddPersona) {
     return (
       <AddPersonaPage
-      onPersonaAdded={handlePersonaAdded}
-      persona={personas[selectedPersona] || {}}
-      onDeletePersona={handleDeletePersona}
-    />
-    
+        personas={personas}
+        persona={selectedPersona || {}}
+        onDeletePersona={handleDeletePersona}
+        onClose={() => {
+          setShowAddPersona(false);
+          setSelectedPersona(null);
+          navigate("/");
+        }}
+        onSubmit={handlePersonaAdded}
+      />
     );
   }
 
@@ -77,7 +132,9 @@ const Home = () => {
           </div>
           <div className="btn">
             <button className="logout-button">Add Activity</button>
-            <button className="logout-button">Logout</button>
+            <button className="logout-button" onClick={handleLogout}>
+              Logout
+            </button>
           </div>
         </div>
         <hr className="hrbar" />
@@ -88,30 +145,19 @@ const Home = () => {
       </div>
       <div className="persona-content align-items-center">
         {personas.map((persona, index) => (
-          <div
-            className="persona-card"
-            key={persona.id}
-            onClick={() => handlePersonaClick(index)}
-          >
+          <div className="persona-card" key={persona.id} onClick={() => handlePersonaClick(index)}>
             <div className="persona-avatar">
-              {persona.avatarURL ? (
-                <img src={persona.avatarURL} alt="Avatar" className="avatar-img" />
-              ) : (
-                <span className="avatar-placeholder">No Image</span>
-              )}
+              <img src={persona.avatarURL || defaultimage} alt="Avatar" className="avatar-img" />
             </div>
             <div className="persona-details">
-              <span className="persona-name">{persona.name || "Unnamed"}</span>
+              <span className="persona-name">{persona.name || "Persona-Name"}</span>
+              <p className="persona-quote">"{persona.quote || "Share your thoughts"}"</p>
+              <p className="persona-last-updated">Last Updated: {getTimeAgo(persona.lastUpdated)}</p>
+              {console.log("createdAt:", persona.createdAt, "lastUpdated:", persona.lastUpdated)}
             </div>
           </div>
         ))}
-        <div
-          className="add-persona-empty bg-light"
-          onClick={() => {
-            setShowAddPersona(true);
-            setSelectedPersona(null);
-          }}
-        >
+        <div className="add-persona-empty bg-light" onClick={() => setShowAddPersona(true)}>
           <span className="plus-icon">
             <PlusCircle color="#C0C0C0" size={60} />
           </span>
