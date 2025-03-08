@@ -60,7 +60,7 @@ const Home = () => {
     if (diffInSeconds < 60) return "Just now";
     if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-    if (diffInSeconds < 172800) return "Yesterday";
+    //if (diffInSeconds < 172800) return "Yesterday";
   
     return updatedTime.toLocaleDateString(); // Default date format
   };
