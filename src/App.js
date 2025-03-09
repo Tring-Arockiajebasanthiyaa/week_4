@@ -11,11 +11,10 @@ const App = () => {
 
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (user) {
-      setIsLoggedIn(true);
-    }
+    localStorage.removeItem("loggedInUser"); // Clear user session on refresh
+    setIsLoggedIn(false);
   }, []);
+  
 
   return (
     <GoogleOAuthProvider clientId="895663561328-9k197o854e0fg6d36svrfei7fjb1l859.apps.googleusercontent.com">
@@ -23,8 +22,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/home" element={isLoggedIn ? <Home /> : <Navigate to="/auth" />} />
-          <Route path="/addpersona" element={isLoggedIn ? <AddPersonaPage /> : <Navigate to="/auth" />} />
+          <Route path="/home" element={isLoggedIn ? <Home /> : <Navigate to="/" />} />
+          <Route path="/addpersona" element={isLoggedIn ? <AddPersonaPage /> : <Navigate to="/" />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>

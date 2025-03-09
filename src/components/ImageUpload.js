@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import UploadingAnimation from "../images/loading.png";
 import EditIcon from "../images/edit.png";
 import DefaultImage from "./Images/dream.jpg";
-import "./style.css";
+import "./ImageUpload.css";
 
 const ImageUpload = ({ onUploadSuccess, initialImage }) => {
   const [avatarURL, setAvatarURL] = useState(initialImage || DefaultImage);

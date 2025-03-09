@@ -3,7 +3,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "./ImageUpload";
-import "./persona.css";
+import "./AddPersonaPage.css";
 import { useDispatch } from "react-redux";
 import { addPersona, updatePersona } from "../redux/personaSlice";
 
@@ -79,10 +79,27 @@ const AddPersonaPage = ({ personas, persona, onDeletePersona }) => {
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
       ["bold", "italic", "underline", "strike"],
       [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image"],
+      ["blockquote", "code-block"],
+      [{ script: "sub" }, { script: "super" }],
+      [{ indent: "-1" }, { indent: "+1" }],
+      [{ align: [] }],
+      [{ color: [] }, { background: [] }],
+      ["link", "image", "video"],
       ["clean"],
     ],
   };
+  
+  const formats = [
+    "header", "bold", "italic", "underline", "strike",
+    "list", "bullet", "blockquote", "code-block",
+    "script", "sub", "super",
+    "indent", "align",
+    "color", "background",
+    "link", "image", "video"
+  ];
+  
+
+  
 
   return (
     <div className="add-persona-page">
@@ -111,27 +128,27 @@ const AddPersonaPage = ({ personas, persona, onDeletePersona }) => {
           <div className="form-grid">
             <div className="form-item">
               <label className="form-label">Notable Quote</label>
-              <ReactQuill value={personaData.quote} onChange={(value) => handleChange("quote", value)} modules={modules} />
+              <ReactQuill value={personaData.quote} onChange={(value) => handleChange("quote", value)} modules={modules}  formats={formats} />
             </div>
             <div className="form-item">
               <label className="form-label">Description</label>
-              <ReactQuill value={personaData.description} onChange={(value) => handleChange("description", value)} modules={modules} />
+              <ReactQuill value={personaData.description} onChange={(value) => handleChange("description", value)} modules={modules}  formats={formats}  />
             </div>
             <div className="form-item">
               <label className="form-label">Attitudes/Motivations</label>
-              <ReactQuill value={personaData.attitudes} onChange={(value) => handleChange("attitudes", value)} modules={modules} />
+              <ReactQuill value={personaData.attitudes} onChange={(value) => handleChange("attitudes", value)} modules={modules}  formats={formats}  />
             </div>
             <div className="form-item">
               <label className="form-label">Pain Points</label>
-              <ReactQuill value={personaData.painPoints} onChange={(value) => handleChange("painPoints", value)} modules={modules} />
+              <ReactQuill value={personaData.painPoints} onChange={(value) => handleChange("painPoints", value)} modules={modules}  formats={formats} />
             </div>
             <div className="form-item">
               <label className="form-label">Jobs/Needs</label>
-              <ReactQuill value={personaData.jobsNeeds} onChange={(value) => handleChange("jobsNeeds", value)} modules={modules} />
+              <ReactQuill value={personaData.jobsNeeds} onChange={(value) => handleChange("jobsNeeds", value)} modules={modules} formats={formats}  />
             </div>
             <div className="form-item">
               <label className="form-label">Activities</label>
-              <ReactQuill value={personaData.activities} onChange={(value) => handleChange("activities", value)} modules={modules} />
+              <ReactQuill value={personaData.activities} onChange={(value) => handleChange("activities", value)} modules={modules} formats={formats}  />
             </div>
           </div>
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import "./style.css";
+import "./ImageUpload.css";
 import AddPersonaPage from "./AddPersonaPage";
-import "./AddPersonaPage.css";
+import "./Home.css";
 import { PlusCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPersona, updatePersona, deletePersona } from "../redux/personaSlice";
@@ -60,7 +60,7 @@ const Home = () => {
     if (diffInSeconds < 60) return "Just now";
     if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-    //if (diffInSeconds < 172800) return "Yesterday";
+   
   
     return updatedTime.toLocaleDateString(); // Default date format
   };
@@ -152,6 +152,7 @@ const Home = () => {
             <div className="persona-details">
               <span className="persona-name">{persona.name || "Persona-Name"}</span>
               <p className="persona-quote">"{persona.quote || "Share your thoughts"}"</p>
+             
               <p className="persona-last-updated">Last Updated: {getTimeAgo(persona.lastUpdated)}</p>
               {console.log("createdAt:", persona.createdAt, "lastUpdated:", persona.lastUpdated)}
             </div>
