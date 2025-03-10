@@ -27,7 +27,7 @@
 .auth-container form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   padding-left: 30px;
 }
 
@@ -65,12 +65,13 @@
 
 .or-divider {
   margin: 15px 0;
-  font-size: 14px;
+  font-size: 20px;
+  padding: 10px;
   color: #bbbbbb;
 }
 
 .toggle-container {
-  margin-top: 10px;
+  margin-top: 20px;
   background: #121212;
 }
 

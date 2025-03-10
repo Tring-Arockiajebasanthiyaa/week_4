@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import "./ImageUpload.css";
-import AddPersonaPage from "./AddPersonaPage";
+import "../ImageUpload/ImageUpload.css";
+import AddPersonaPage from "../AddPersonaPage/AddPersonaPage";
 import "./Home.css";
 import { PlusCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { addPersona, updatePersona, deletePersona } from "../redux/personaSlice";
-import defaultimage from "./Images/dream.jpg";
+import { addPersona, updatePersona, deletePersona } from "../../redux/personaSlice";
+import defaultimage from "../../images/dream.jpg";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
@@ -151,7 +151,7 @@ const Home = () => {
             </div>
             <div className="persona-details">
               <span className="persona-name">{persona.name || "Persona-Name"}</span>
-              <p className="persona-quote">"{persona.quote || "Share your thoughts"}"</p>
+              <span className="persona-quote">{persona.quote || "Share your thoughts"}</span>
              
               <p className="persona-last-updated">Last Updated: {getTimeAgo(persona.lastUpdated)}</p>
               {console.log("createdAt:", persona.createdAt, "lastUpdated:", persona.lastUpdated)}

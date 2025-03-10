@@ -35,7 +35,8 @@ h1 {
   margin: 0;  
   font-size: 20px;
   float: inline-start;
-  text-align: center;
+  display: flex;
+  align-items: center;
   border:1px solid #e1e1e1;
   background-color: #e1e1e1;
   padding: 25px;
@@ -46,23 +47,30 @@ h2{
   margin: 0;  
   font-size: 20px;
   padding-left: 10px;
+  text-align: center;
+  padding-top: 15px;
 }
 .btn{
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content:center;
+  float: right;
   gap: 10px;
   border: none;
-  margin: 0;
+  text-align: center;
+  margin-top: 0;
 }
 .logout-button {
-  padding: 25px 55px;
+  display: flex;
+  align-items: center;
+  padding: 25px ;
   background: #007791;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   text-align: center;
+  justify-content: center;
   text-wrap: nowrap;
   }
 
@@ -80,11 +88,11 @@ h2{
   color: #304146;
   display: flex;
   flex-direction: row;
-  gap:10px;
+  gap:15px;
+  font-size:20px;
+  height: 50px;
 }
-.navbar h5{
-    padding-left: 50px;
-}
+
 .navbar .personname-field{
   text-decoration: underline;
   color:#008E97 !important;
@@ -93,7 +101,7 @@ h2{
  /* inside card contents */
 .persona-name{
   color: black;
-  text-align: left;
+ 
   
 }
 
@@ -105,15 +113,15 @@ h2{
 .persona-content {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; 
+  gap: 25px; 
   flex-direction: row; 
   width: 100vw;
   padding: 20%;
   justify-content: center;
-  padding-top: 10px;
+  padding-top: 30px;
   background-color:#C0C0C0;
   overflow-y: scroll;
-  overflow-x: scroll;
+  
 }
 
 .persona-card,
@@ -127,6 +135,7 @@ h2{
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: all 0.3s ease-in-out;
 }
 
 .persona-image img {
@@ -141,9 +150,9 @@ h2{
   padding: 20px;
   text-align: center;
   font-size: 16px;
-  
+  display: flex;
+  flex-direction: column;
   justify-content: end;
-  
   color:#555;
 
 }
@@ -163,7 +172,7 @@ h2{
 }
 
 .persona-card:hover{
-   transition: ease-in-out;
+  transform: scale(1.05);
 }
 .plus-icon {
   background-color:#E5E4E2;
@@ -193,4 +202,7 @@ h2{
 .current_date{
   color: #555;
   padding-right: 70%;
+}
+.persona-quote{
+  padding-top: 10px;
 }

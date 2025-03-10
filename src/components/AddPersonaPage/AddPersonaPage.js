@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useNavigate } from "react-router-dom";
-import ImageUpload from "./ImageUpload";
+import ImageUpload from "../ImageUpload/ImageUpload";
 import "./AddPersonaPage.css";
 import { useDispatch } from "react-redux";
-import { addPersona, updatePersona } from "../redux/personaSlice";
+import { addPersona, updatePersona } from "../../redux/personaSlice"
 
 const AddPersonaPage = ({ personas, persona, onDeletePersona }) => {
   const navigate = useNavigate();
@@ -84,7 +84,7 @@ const AddPersonaPage = ({ personas, persona, onDeletePersona }) => {
       [{ indent: "-1" }, { indent: "+1" }],
       [{ align: [] }],
       [{ color: [] }, { background: [] }],
-      ["link", "image", "video"],
+      ["link"],
       ["clean"],
     ],
   };
@@ -95,7 +95,7 @@ const AddPersonaPage = ({ personas, persona, onDeletePersona }) => {
     "script", "sub", "super",
     "indent", "align",
     "color", "background",
-    "link", "image", "video"
+    "link"
   ];
   
 

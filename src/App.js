@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./components/Home";
+import Home from "./components/Home/Home";
 import Landing from "./Landing";
 import Auth from "./Auth";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import AddPersonaPage from "./components/AddPersonaPage";
+import AddPersonaPage from "./components/AddPersonaPage/AddPersonaPage";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
