@@ -4,20 +4,18 @@ import AddPersonaPage from "../AddPersonaPage/AddPersonaPage";
 import "./Home.css";
 import { PlusCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { addPersona, updatePersona, deletePersona } from "../../redux/personaSlice";
+import { addPersona, updatePersona, deletePersona ,clearPersonas} from "../../redux/personaSlice";
 import defaultimage from "../../images/dream.jpg";
 import { useNavigate } from "react-router-dom";
-
 const Home = () => {
   const [showAddPersona, setShowAddPersona] = useState(false);
   const [selectedPersona, setSelectedPersona] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const personas = useSelector((state) => Array.isArray(state.personas) ? state.personas : []);
-  
   const [userInitial, setUserInitial] = useState("");
   const [userName, setUserName] = useState("");
-
+  
   useEffect(() => {
     const getUserData = () => {
       const googleUser = JSON.parse(localStorage.getItem("googleUser"));
@@ -90,7 +88,6 @@ const Home = () => {
     setSelectedPersona(null);
     navigate("/home");
   };
-
   const handleDeletePersona = (personaId) => {
     if (window.confirm("Are you sure you want to delete this persona?")) {
       dispatch(deletePersona(personaId));
@@ -106,6 +103,9 @@ const Home = () => {
     navigate("/", { replace: true });
   };
   
+ const handledescript = (res) =>{
+  return <span>{res}</span>;
+ }
   if (showAddPersona) {
     return (
       <AddPersonaPage
@@ -121,7 +121,7 @@ const Home = () => {
       />
     );
   }
-
+  
   return (
     <div className="home-container">
       <div className="header-field">
@@ -141,6 +141,7 @@ const Home = () => {
         <div className="navbar">
           <h5 className="personname-field">Persona</h5>
           <h5>Strategy Canvas</h5>
+          <button className="delbtn" onClick={() => dispatch(clearPersonas())}>Delete All Personas</button>
         </div>
       </div>
       <div className="persona-content align-items-center">
@@ -151,9 +152,8 @@ const Home = () => {
             </div>
             <div className="persona-details">
               <span className="persona-name">{persona.name || "Persona-Name"}</span>
-              <span className="persona-quote">{persona.quote || "Share your thoughts"}</span>
-             
-              <p className="persona-last-updated">Last Updated: {getTimeAgo(persona.lastUpdated)}</p>
+              <span className="persona-quote">{handledescript(persona.quote)}</span>
+              <span className="persona-last-updated">Last Updated: {getTimeAgo(persona.lastUpdated)}</span>
               {console.log("createdAt:", persona.createdAt, "lastUpdated:", persona.lastUpdated)}
             </div>
           </div>

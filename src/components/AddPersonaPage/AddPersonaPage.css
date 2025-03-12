@@ -49,6 +49,7 @@
   color: black;
   padding-bottom: 10px;
   margin-top: 20px;
+  overflow: auto;
  
 }
 
@@ -150,7 +151,4 @@
   width: 10%;
   padding: 10%;
   height: 10%;
-}
-.persona-quote{
-  padding-top: 10px;
 }

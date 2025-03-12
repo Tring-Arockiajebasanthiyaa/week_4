@@ -13,7 +13,7 @@ const ImageUpload = ({ onUploadSuccess, initialImage }) => {
     event.preventDefault();
     fileUploadRef.current.click();
   };
-
+ 
   const uploadImageDisplay = async () => {
     try {
       setIsUploading(true);
@@ -34,7 +34,8 @@ const ImageUpload = ({ onUploadSuccess, initialImage }) => {
         setAvatarURL(initialImage || DefaultImage);
         setIsUploading(false);
         return;
-      }
+      } 
+      
   
       const previewURL = URL.createObjectURL(uploadedFile);
       setAvatarURL(previewURL);
@@ -68,7 +69,9 @@ const ImageUpload = ({ onUploadSuccess, initialImage }) => {
           className="img-fluid uploadimage"
         >
           <img src={EditIcon} alt="Edit" className="object-cover" />
+          
         </button>
+
         <input
           type="file"
           id="file"

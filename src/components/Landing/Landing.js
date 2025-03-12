@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Landing.css";
-import Tringapps from "./images/tringapps-copy-2 (1).png"
+import Tringapps from "../../images/tringapps-copy-2 (1).png"
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -22,14 +22,17 @@ const Landing = () => {
           </button>
         </div>
       </nav>
-
       <div className="content-container">
         <h1 className="main-heading">Welcome to Our Platform</h1>
         <p className="text-paragraph">
-          Some introductory text about your platform. Explain what it does and why users should sign up.
+  Tringapps is a cutting-edge digital transformation company that specializes in delivering world-class software solutions. 
+  With expertise in AI, cloud computing, mobile and web applications, and enterprise solutions, we help businesses achieve 
+  their digital goals efficiently.
         </p>
         <p className="text-paragraph">
-          You can add more paragraphs or sections here to provide more information about your platform.
+  At Tringapps, we combine innovation with technology to build high-performance applications for Fortune 500 companies and 
+  emerging startups. Our team of experts excels in designing and developing scalable solutions that enhance user experience 
+  and business growth.
         </p>
       </div>
     </div>

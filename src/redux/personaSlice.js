@@ -16,7 +16,7 @@ const personaSlice = createSlice({
   reducers: {
     addPersona: (state, action) => {
       if (action.payload?.id) {
-        state.push(action.payload);
+        state.push(action.payload);//payload - data that the action carries
         saveToLocalStorage(state); // Save after adding
       }
     },
@@ -35,8 +35,12 @@ const personaSlice = createSlice({
       saveToLocalStorage(newState); // Save after deleting
       return newState;
     },
+    clearPersonas: () => {
+      localStorage.removeItem("personas"); // Clear local storage
+      return []; // Reset state
+    },
   },
 });
 
-export const { addPersona, updatePersona, deletePersona } = personaSlice.actions;
+export const { addPersona, updatePersona, deletePersona,clearPersonas } = personaSlice.actions;
 export default personaSlice.reducer;

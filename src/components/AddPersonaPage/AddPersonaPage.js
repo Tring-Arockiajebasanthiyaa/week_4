@@ -5,12 +5,11 @@ import { useNavigate } from "react-router-dom";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import "./AddPersonaPage.css";
 import { useDispatch } from "react-redux";
-import { addPersona, updatePersona } from "../../redux/personaSlice"
-
+import { addPersona, updatePersona} from "../../redux/personaSlice"
+import { useSearchParams } from "react-router-dom";
 const AddPersonaPage = ({ personas, persona, onDeletePersona }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [personaData, setPersonaData] = useState({
     id: persona?.id || "",
     name: persona?.name || "",
@@ -53,9 +52,13 @@ const AddPersonaPage = ({ personas, persona, onDeletePersona }) => {
     console.log("Navigating to home...");
     window.history.back();
   };
+  const handledescript =()=>{
+    const res = Date.now.toString();
+    dispatch(updatePersona({ ...personaData, lastUpdated: res }))
+    return res;
+  }
   
-  
-  
+
 
   const handleClose = () => {
     console.log("Navigating to home...");
@@ -120,11 +123,11 @@ const AddPersonaPage = ({ personas, persona, onDeletePersona }) => {
               type="text"
               value={personaData.name}
               onChange={(e) => handleChange("name", e.target.value)}
-              className="input_label"
+              className="input_label" maxLength={20}
               required
             />
           </div>
-
+          <button onClick={handledescript}>Last update</button>
           <div className="form-grid">
             <div className="form-item">
               <label className="form-label">Notable Quote</label>
